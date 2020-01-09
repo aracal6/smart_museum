@@ -34,4 +34,67 @@
 ![79bd812bb29d35dba12ee5fdfe48df3.png](https://upload-images.jianshu.io/upload_images/9643258-4947c8fff3be17a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
+## API 产品使用及输出展示
+- 语音合成api
+- 接口描述：
+- 接口调用：
+```
+result  = client.synthesis('你好百度', 'zh', 1, {
+    'vol': 5,
+})
+
+# 识别正确返回语音二进制 错误则返回dict 参照下面错误码
+if not isinstance(result, dict):
+    with open('auido.mp3', 'wb') as f:
+        f.write(result)
+```
+
+- 输出：
+```
+// 成功返回二进制文件流
+// 失败返回
+{
+    "err_no":500,
+    "err_msg":"notsupport.",
+    "sn":"abcdefgh",
+    "idx":1
+}
+```
+
+![2322dc151b65a4c355b7e614069f204.png](https://upload-images.jianshu.io/upload_images/9643258-cf1e8642369d0d6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+
+- 地标识别api
+- 接口描述：该请求用于识别地标，即对于输入的一张图片（可正常解码，且长宽比适宜），输出图片中的地标识别结果。
+- 接口调用：
+```
+# encoding:utf-8
+
+import requests
+import base64
+
+'''
+地标识别
+'''
+
+request_url = "https://aip.baidubce.com/rest/2.0/image-classify/v1/landmark"
+# 二进制方式打开图片文件
+f = open('[本地文件]', 'rb')
+img = base64.b64encode(f.read())
+
+params = {"image":img}
+access_token = '[调用鉴权接口获取的token]'
+request_url = request_url + "?access_token=" + access_token
+headers = {'content-type': 'application/x-www-form-urlencoded'}
+response = requests.post(request_url, data=params, headers=headers)
+if response:
+    print (response.json())
+```
+
+- 输出
+```
+{"log_id": 3450013152046070669, "result": {"landmark": "狮身人面像"}}
+```
+
 
